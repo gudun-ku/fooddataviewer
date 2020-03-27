@@ -1,3 +1,5 @@
 package com.beloushkin.fooddataviewer.foodlist
 
-object FoodListEffect
+sealed class FoodListEffect
+
+object NavigateToScanner: FoodListEffect()

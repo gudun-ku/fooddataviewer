@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">fooddataviewer</string>
+    <string name="food_list_submit">food_list_submit</string>
 </resources>

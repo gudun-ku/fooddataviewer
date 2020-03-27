@@ -1,3 +1,5 @@
 package com.beloushkin.fooddataviewer.foodlist
 
-object FoodListEvent
+sealed class FoodListEvent
+
+object AddButtonClicked: FoodListEvent()
