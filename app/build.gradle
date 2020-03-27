@@ -54,6 +54,9 @@ dependencies {
     implementation "com.spotify.mobius:mobius-rx2:$mobiusVersion"
     implementation "com.spotify.mobius:mobius-android:$mobiusVersion"
 
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 

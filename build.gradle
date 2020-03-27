@@ -18,6 +18,7 @@ ext {
     materialVersion = '1.0.0'
     daggerVersion = '2.23.1'
     mobiusVersion = '1.2.2'
+    lifecycleVersion = '2.0.0'
 }
 
 allprojects {
