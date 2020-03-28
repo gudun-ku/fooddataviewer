@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.beloushkin.fooddataviewer.R
 import com.beloushkin.fooddataviewer.foodlist.FoodListViewModel
+import com.beloushkin.fooddataviewer.scan.ScanViewModel
 import com.beloushkin.fooddataviewer.utils.ActivityService
 import com.beloushkin.fooddataviewer.utils.Navigator
 import dagger.*
@@ -57,4 +58,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FoodListViewModel::class)
     abstract fun foodListViewModel(viewModel: FoodListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ScanViewModel::class)
+    abstract fun scanViewModel(viewModel: ScanViewModel): ViewModel
 }

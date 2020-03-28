@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "45092038514",
+    "firebase_url": "https://bellfooddataviewer.firebaseio.com",
+    "project_id": "bellfooddataviewer",
+    "storage_bucket": "bellfooddataviewer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:45092038514:android:e513b1f4bd97c655da1feb",
+        "android_client_info": {
+          "package_name": "com.beloushkin.fooddataviewer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "45092038514-vs31jo385jip74dsfdelhm5re2i6svvp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADHjdOBoVaWJybZ-gwQErGDDxB8japf_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "45092038514-vs31jo385jip74dsfdelhm5re2i6svvp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
