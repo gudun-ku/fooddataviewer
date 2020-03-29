@@ -1,6 +1,7 @@
 package com.beloushkin.fooddataviewer.di
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.beloushkin.fooddataviewer.R
@@ -100,8 +101,13 @@ object ApiModule {
     @JvmStatic
     fun okHttpClient():OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
+            .addInterceptor(HttpLoggingInterceptor(logger = object:HttpLoggingInterceptor.Logger {
+                override fun log(message: String) {
+                    Log.d("_OMEGA", "OkHttp: " + message);
+                }
+            }).apply {
                 level = HttpLoggingInterceptor.Level.BODY
+
             })
             .build()
     }
@@ -112,6 +118,7 @@ object ApiModule {
     fun retrofit(@ApiBaseUrl apiBaseUrl: String, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(apiBaseUrl)
+            .client(okHttpClient)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())
             .build()

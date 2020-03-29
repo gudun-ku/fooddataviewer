@@ -21,6 +21,8 @@ class ProcessFrameHandler @Inject constructor()
     val options = FirebaseVisionBarcodeDetectorOptions.Builder()
         .setBarcodeFormats(
             FirebaseVisionBarcode.FORMAT_CODE_128,
+            FirebaseVisionBarcode.FORMAT_CODE_39,
+            FirebaseVisionBarcode.FORMAT_AZTEC,
             FirebaseVisionBarcode.FORMAT_EAN_13
         )
         .build()

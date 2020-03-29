@@ -27,6 +27,7 @@ ext {
     retrofitVersion = '2.6.2'
     moshiVersion = '1.8.0'
     okhttpVersion = '4.2.0'
+    glideVersion = '4.9.0'
 }
 
 allprojects {

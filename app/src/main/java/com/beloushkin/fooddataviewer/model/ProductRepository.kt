@@ -1,5 +1,6 @@
 package com.beloushkin.fooddataviewer.model
 
+import android.util.Log
 import com.beloushkin.fooddataviewer.model.dto.NutrimentsDto
 import com.beloushkin.fooddataviewer.model.dto.ProductDto
 import io.reactivex.Single
@@ -10,6 +11,7 @@ class ProductRepository @Inject constructor(private val productService: ProductS
 
     fun getProductFromApi(barcode: String): Single<Product> {
         return productService.getProduct(barcode)
+            .also { Log.d("_MEGA", it.toString()) }
             .map { response -> mapProduct(dto = response.product, saved = false) }
     }
 }
