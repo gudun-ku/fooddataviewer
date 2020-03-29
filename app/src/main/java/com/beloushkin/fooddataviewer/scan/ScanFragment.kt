@@ -16,6 +16,7 @@ import android.view.Surface
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.beloushkin.fooddataviewer.R
 import com.beloushkin.fooddataviewer.getViewModel
@@ -30,6 +31,7 @@ import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.product_layout_small.*
 import kotlinx.android.synthetic.main.scan_fragment.*
 import java.lang.IllegalStateException
 
@@ -78,7 +80,33 @@ class ScanFragment : Fragment(R.layout.scan_fragment) {
                 )
             }
             .compose(getViewModel(ScanViewModel::class))
-            .subscribe()
+            .subscribe {model ->
+                loadingIndicator.isVisible = model.activity
+                productView.isVisible = model.processBarcodeResult is ProcessBarcodeResult.ProductLoaded
+                errorView.isVisible = model.processBarcodeResult is ProcessBarcodeResult.Error
+
+                if (model.processBarcodeResult is ProcessBarcodeResult.ProductLoaded) {
+                    productNameView.text = model.processBarcodeResult.product.name
+                    brandNameView.text = model.processBarcodeResult.product.brands
+                    energyValue.text = getString(
+                        R.string.scan_energy_value,
+                        model.processBarcodeResult.product.nutriments?.energy
+                    )
+                    carbsValue.text = getString(
+                        R.string.scan_macro_value,
+                        model.processBarcodeResult.product.nutriments?.carbohydrates
+                    )
+                    proteinsValue.text = getString(
+                        R.string.scan_macro_value,
+                        model.processBarcodeResult.product.nutriments?.proteins
+                    )
+                    fatValue.text = getString(
+                        R.string.scan_macro_value,
+                        model.processBarcodeResult.product.nutriments?.fat
+                    )
+
+                }
+            }
     }
 
     override fun onStart() {

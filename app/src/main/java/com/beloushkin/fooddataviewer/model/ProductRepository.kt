@@ -1,5 +1,7 @@
 package com.beloushkin.fooddataviewer.model
 
+import com.beloushkin.fooddataviewer.model.dto.NutrimentsDto
+import com.beloushkin.fooddataviewer.model.dto.ProductDto
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -18,7 +20,22 @@ fun mapProduct(dto: ProductDto, saved: Boolean): Product {
         name = dto.product_name,
         brands = dto.brands,
         imageUrl = dto.image_url,
-        ingridients = dto.ingridients_text_debug,
-        saved = saved
+        ingridients = dto.ingridients_text_debug ?: "",
+        saved = saved,
+        nutriments = mapNutriments(dto.nutriments)
     )
+}
+
+fun mapNutriments(dto: NutrimentsDto?): Nutriments? {
+    if (dto == null) return null
+    return Nutriments(
+        energy = dto.energy_100g,
+        salt  = dto.salt_100g,
+        carbohydrates = dto.carbohydrates_100g,
+        fiber = dto.fiber_100g,
+        sugars = dto.sugars_100g,
+        proteins = dto.proteins_100g,
+        fat = dto.fat_100g
+    )
+
 }
