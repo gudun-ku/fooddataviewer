@@ -55,6 +55,7 @@ dependencies {
     implementation "com.spotify.mobius:mobius-core:$mobiusVersion"
     implementation "com.spotify.mobius:mobius-rx2:$mobiusVersion"
     implementation "com.spotify.mobius:mobius-android:$mobiusVersion"
+    testImplementation "com.spotify.mobius:mobius-test:$mobiusVersion"
 
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
