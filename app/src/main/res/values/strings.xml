@@ -9,6 +9,8 @@
     <string name="scan_energy">Energy:</string>
     <string name="scan_energy_value">%1$d kcal</string>
     <string name="scan_macro_value">%1$.1fg</string>
+    <string name="food_details_save">save</string>
+    <string name="str_lipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or</string>
 
 
 </resources>
