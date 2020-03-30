@@ -3,9 +3,9 @@ package com.beloushkin.fooddataviewer.scan
 import com.beloushkin.fooddataviewer.MobiusVM
 import com.beloushkin.fooddataviewer.scan.handlers.ProcessBarcodeHandler
 import com.beloushkin.fooddataviewer.scan.handlers.ProcessFrameHandler
+import com.beloushkin.fooddataviewer.utils.Navigator
 import com.spotify.mobius.Next
-import com.spotify.mobius.Next.next
-import com.spotify.mobius.Next.noChange
+import com.spotify.mobius.Next.*
 import com.spotify.mobius.Update
 import com.spotify.mobius.rx2.RxMobius
 import javax.inject.Inject
@@ -34,12 +34,20 @@ fun scanUpdate(
                 processBarcodeResult = ProcessBarcodeResult.Error
             )
         )
+        ProductInfoClicked -> if (model.processBarcodeResult is ProcessBarcodeResult.ProductLoaded){
+            dispatch<ScanModel, ScanEffect>(
+                setOf(NavigateToFoodDetails(model.processBarcodeResult.product.id))
+            )
+        } else {
+            noChange<ScanModel, ScanEffect>()
+        }
     }
 }
 
 class ScanViewModel @Inject constructor(
     processCameraFrameHandler: ProcessFrameHandler,
-    processBarcodeHandler: ProcessBarcodeHandler
+    processBarcodeHandler: ProcessBarcodeHandler,
+    navigator: Navigator
 )
     : MobiusVM<ScanModel, ScanEvent, ScanEffect>(
     "ScanViewModel",
@@ -48,5 +56,8 @@ class ScanViewModel @Inject constructor(
     RxMobius.subtypeEffectHandler<ScanEffect, ScanEvent>()
         .addTransformer(ProcessCameraFrame::class.java, processCameraFrameHandler)
         .addTransformer(ProcessBarcode::class.java, processBarcodeHandler)
+        .addConsumer(NavigateToFoodDetails::class.java) { effect ->
+            navigator.to(ScanFragmentDirections.foodDetails(effect.barcode))
+        }
         .build()
 )

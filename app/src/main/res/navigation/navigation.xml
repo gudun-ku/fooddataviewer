@@ -5,6 +5,7 @@
     app:startDestination="@id/foodListFragment"
     android:id="@+id/navigation"
     >
+
     <fragment android:id="@+id/foodListFragment"
             android:name="com.beloushkin.fooddataviewer.foodlist.FoodListFragment">
         <action
@@ -12,7 +13,21 @@
             app:destination="@+id/scanFragment"
             />
     </fragment>
+
     <fragment android:id="@+id/scanFragment"
-        android:name="com.beloushkin.fooddataviewer.scan.ScanFragment"
+        android:name="com.beloushkin.fooddataviewer.scan.ScanFragment">
+
+        <action android:id="@+id/foodDetails"
+            app:destination="@id/foodDetailsFragment"
         />
+    </fragment>
+
+    <fragment android:id="@+id/foodDetailsFragment"
+        android:name="com.beloushkin.fooddataviewer.fooddetails.FoodDetailsFragment">
+        <argument
+            android:name="barcode"
+            app:argType="string"
+        />
+    </fragment>
+
 </navigation>

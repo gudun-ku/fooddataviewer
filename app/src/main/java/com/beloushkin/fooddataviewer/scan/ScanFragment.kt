@@ -20,7 +20,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.beloushkin.fooddataviewer.R
 import com.beloushkin.fooddataviewer.getViewModel
+import com.bumptech.glide.Glide
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
+import com.jakewharton.rxbinding3.view.clicks
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.configuration.CameraConfiguration
 import io.fotoapparat.preview.Frame
@@ -67,7 +69,7 @@ class ScanFragment : Fragment(R.layout.scan_fragment) {
         )
 
         val cameraId = findRearFacingCameraId()
-        disposable = Observable.create(frameProcessor)
+        disposable = Observable.mergeArray(Observable.create(frameProcessor)
             .map { frame ->
                 Captured(
                     frame.copy(
@@ -78,7 +80,9 @@ class ScanFragment : Fragment(R.layout.scan_fragment) {
                         )
                     )
                 )
-            }
+            },
+            productView.clicks().map { ProductInfoClicked }
+            )
             .compose(getViewModel(ScanViewModel::class))
             .subscribe {model ->
                 loadingIndicator.isVisible = model.activity
@@ -105,6 +109,10 @@ class ScanFragment : Fragment(R.layout.scan_fragment) {
                         model.processBarcodeResult.product.nutriments?.fat
                     )
 
+                    Glide.with(requireContext())
+                        .load(model.processBarcodeResult.product.imageUrl)
+                        .fitCenter()
+                        .into(productImageView)
                 }
             }
     }
