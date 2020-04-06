@@ -13,7 +13,11 @@ fun foodDetailsUpdate(
     event: FoodDetailsEvent
 ): Next<FoodDetailsModel, FoodDetailsEffect>{
     return when(event){
-        else -> next(model.copy(activity = false))// TODO
+        is Initial -> next(
+            model.copy(activity = true),
+            setOf(LoadProduct(event.barcode))
+        )
+        is ActionButtonClicked -> TODO()
     }
 }
 
@@ -25,6 +29,12 @@ class FoodDetailsViewModel @Inject constructor(
     Update(::foodDetailsUpdate),
     FoodDetailsModel(),
     RxMobius.subtypeEffectHandler<FoodDetailsEffect, FoodDetailsEvent>()
+            // it comes next
+//        .addTransformer(LoadProduct::class.java) { upstream ->
+//            upstream.switchMap { effect ->
+//                productRepository.getProductFromApi(effect.barcode)
+//            }
+//        }
         .build()
 )
 

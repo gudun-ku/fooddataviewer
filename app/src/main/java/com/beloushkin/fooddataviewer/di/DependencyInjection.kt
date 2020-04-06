@@ -4,10 +4,12 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
 import com.beloushkin.fooddataviewer.R
 import com.beloushkin.fooddataviewer.fooddetails.FoodDetailsViewModel
 import com.beloushkin.fooddataviewer.foodlist.FoodListViewModel
 import com.beloushkin.fooddataviewer.model.ProductService
+import com.beloushkin.fooddataviewer.model.database.ApplicationDatabase
 import com.beloushkin.fooddataviewer.scan.ScanViewModel
 import com.beloushkin.fooddataviewer.utils.ActivityService
 import com.beloushkin.fooddataviewer.utils.Navigator
@@ -35,7 +37,8 @@ internal annotation class ViewModelKey(val value: KClass<out ViewModel>)
 internal annotation class ApiBaseUrl
 
 @Singleton
-@Component(modules = [ApplicationModule::class, ViewModelModule::class, ApiModule::class])
+@Component(modules = [ApplicationModule::class, ViewModelModule::class, ApiModule::class,
+                        DatabaseModule::class])
 interface ApplicationComponent {
     fun viewModelFactory(): ViewModelProvider.Factory
 
@@ -136,5 +139,23 @@ object ApiModule {
     fun productService(retrofit: Retrofit): ProductService {
         return retrofit.create(ProductService::class.java)
     }
+
+}
+
+@Module
+object DatabaseModule {
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun applicationDatabaseContext(context: Context): ApplicationDatabase {
+        return Room.databaseBuilder(context, ApplicationDatabase::class.java, "application")
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun productDao(database: ApplicationDatabase) = database.productDao()
 
 }
