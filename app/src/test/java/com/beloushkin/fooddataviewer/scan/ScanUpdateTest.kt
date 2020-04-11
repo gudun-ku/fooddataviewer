@@ -1,7 +1,6 @@
 package com.beloushkin.fooddataviewer.scan
 
 import com.beloushkin.fooddataviewer.model.Product
-import com.beloushkin.fooddataviewer.scan.*
 import com.spotify.mobius.test.NextMatchers.*
 import com.spotify.mobius.test.UpdateSpec
 import com.spotify.mobius.test.UpdateSpec.assertThatNext

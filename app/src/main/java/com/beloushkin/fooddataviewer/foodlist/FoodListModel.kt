@@ -1,3 +1,7 @@
 package com.beloushkin.fooddataviewer.foodlist
 
-object FoodListModel
+import com.beloushkin.fooddataviewer.model.Product
+
+data class FoodListModel(
+    val products: List<Product> = listOf()
+)

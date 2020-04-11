@@ -5,12 +5,17 @@ import com.beloushkin.fooddataviewer.model.database.ProductDao
 import com.beloushkin.fooddataviewer.model.dto.NutrimentsDto
 import com.beloushkin.fooddataviewer.model.dto.ProductDto
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(private val productService: ProductService,
                                             private val productDao: ProductDao
 ){
+    fun get(): Observable<List<Product>> {
+        return productDao.get()
+            .map { it.map { productDto -> mapProduct(productDto, true) } }
+    }
 
     fun loadProduct(barcode: String): Single<Product> {
         return getProductFromDatabase(barcode)
