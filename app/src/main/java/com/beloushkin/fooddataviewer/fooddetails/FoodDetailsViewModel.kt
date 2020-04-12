@@ -23,11 +23,13 @@ fun foodDetailsUpdate(
         is ErrorLoadingProduct -> next(model.copy(activity = false, error = true))
         is ActionButtonClicked -> if (model.product != null) {
             if (model.product.saved) {
-                dispatch<FoodDetailsModel, FoodDetailsEffect>(
+                next<FoodDetailsModel, FoodDetailsEffect>(
+                    model.copy(product = model.product.copy(saved = !model.product.saved)),
                     setOf(DeleteProduct(model.product.id))
                 )
             } else {
-                dispatch<FoodDetailsModel, FoodDetailsEffect>(
+                next<FoodDetailsModel, FoodDetailsEffect>(
+                    model.copy(product = model.product.copy(saved = !model.product.saved)),
                     setOf(SaveProduct(model.product))
                 )
             }

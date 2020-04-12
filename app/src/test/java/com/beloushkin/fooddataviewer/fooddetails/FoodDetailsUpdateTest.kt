@@ -87,7 +87,7 @@ class FoodDetailsUpdateTest {
             .whenEvent(ActionButtonClicked)
             .then(
                 assertThatNext<FoodDetailsModel, FoodDetailsEffect>(
-                    hasNoModel(),
+                    hasModel(model.copy(product = model.product!!.copy(saved = !product.saved))),
                     hasEffects(DeleteProduct(product.id))
                 )
             )
@@ -111,7 +111,7 @@ class FoodDetailsUpdateTest {
             .whenEvent(ActionButtonClicked)
             .then(
                 assertThatNext<FoodDetailsModel, FoodDetailsEffect>(
-                    hasNoModel(),
+                    hasModel(model.copy(product = model.product!!.copy(saved = !product.saved))),
                     hasEffects(SaveProduct(product))
                 )
             )
