@@ -7,12 +7,13 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.beloushkin.fooddataviewer.di.ApplicationComponent
-import com.beloushkin.fooddataviewer.di.DaggerApplicationComponent
+import com.beloushkin.fooddataviewer.di.DaggerRealComponent
+
 import kotlin.reflect.KClass
 
-class App: Application() {
-    val component by lazy {
-        DaggerApplicationComponent.builder()
+open class App: Application() {
+    open val component:ApplicationComponent by lazy {
+        DaggerRealComponent.builder()
             .context(this)
             .build()
     }

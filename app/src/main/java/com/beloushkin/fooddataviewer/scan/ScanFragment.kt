@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.beloushkin.fooddataviewer.R
+import com.beloushkin.fooddataviewer.component
 import com.beloushkin.fooddataviewer.getViewModel
 import com.bumptech.glide.Glide
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
@@ -55,7 +56,7 @@ class ScanFragment : Fragment(R.layout.scan_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val frameProcessor = FrameProcessorOnSubscribe()
+        val frameProcessor = requireContext().component.frameProcessorOnSubscribe()
 
         fotoapparat = Fotoapparat(
             context = requireContext(),
@@ -201,18 +202,5 @@ class ScanFragment : Fragment(R.layout.scan_fragment) {
             }
         }
         return result
-    }
-}
-
-private class FrameProcessorOnSubscribe: ObservableOnSubscribe<Frame>, FrameProcessor {
-    private var emitter: ObservableEmitter<Frame>? = null
-
-    override fun subscribe(emitter: ObservableEmitter<Frame>) {
-        emitter.setCancellable { this.emitter = null }
-        this.emitter = emitter
-    }
-
-    override fun invoke(frame: Frame) {
-        emitter?.onNext(frame)
     }
 }

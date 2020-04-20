@@ -1,7 +1,6 @@
 package com.beloushkin.fooddataviewer
 
 import androidx.lifecycle.ViewModel
-import com.spotify.mobius.EventSource
 import com.spotify.mobius.MobiusLoop
 import com.spotify.mobius.Update
 import com.spotify.mobius.android.AndroidLogger

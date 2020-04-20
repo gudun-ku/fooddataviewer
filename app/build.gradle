@@ -8,8 +8,6 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-apply plugin: 'com.google.gms.google-services'
-
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -19,9 +17,22 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.beloushkin.fooddataviewer.AndrodTestRunner"
     }
+    testBuildType 'instrumented'
+
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    }
+
     buildTypes {
+        debug{
+            applicationIdSuffix '.debug'
+        }
+        instrumented{
+            initWith debug
+            applicationIdSuffix '.instrumented'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -92,9 +103,18 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
 
     testImplementation "junit:junit:$junitVersion"
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
-    testImplementation "androidx.arch.core:core-testing:$coreTestingVersion"
+//    testImplementation 'io.kotlintest.kotlintest-runner-junit4:3.4.2'
+//    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
+//    testImplementation "androidx.arch.core:core-testing:$coreTestingVersion"
 
     androidTestImplementation "androidx.test:runner:$runnerVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "androidx.test:rules:$testingRulesVersion"
+    androidTestImplementation 'com.github.tmurakami:dexopener:2.0.4'
+    instrumentedImplementation "androidx.test:core:$testingVersion"
+    instrumentedImplementation "androidx.fragment:fragment-testing:$testingFragmentVersion"
+    instrumentedImplementation "com.squareup.okhttp3:mockwebserver:$mockWebServerVersion"
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
 }
+
+apply plugin: 'com.google.gms.google-services'

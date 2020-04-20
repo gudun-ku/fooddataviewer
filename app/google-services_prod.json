@@ -34,35 +34,6 @@
           ]
         }
       }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:45092038514:android:24f72bf64d0c64e7da1feb",
-        "android_client_info": {
-          "package_name": "com.beloushkin.fooddataviewer.instrumented"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "45092038514-vs31jo385jip74dsfdelhm5re2i6svvp.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyADHjdOBoVaWJybZ-gwQErGDDxB8japf_E"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "45092038514-vs31jo385jip74dsfdelhm5re2i6svvp.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
     }
   ],
   "configuration_version": "1"

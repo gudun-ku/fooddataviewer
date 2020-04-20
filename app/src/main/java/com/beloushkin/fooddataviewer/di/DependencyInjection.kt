@@ -11,8 +11,11 @@ import com.beloushkin.fooddataviewer.foodlist.FoodListViewModel
 import com.beloushkin.fooddataviewer.model.ProductService
 import com.beloushkin.fooddataviewer.model.database.ApplicationDatabase
 import com.beloushkin.fooddataviewer.scan.ScanViewModel
+import com.beloushkin.fooddataviewer.scan.utils.FrameProcessorOnSubscribe
 import com.beloushkin.fooddataviewer.utils.ActivityService
 import com.beloushkin.fooddataviewer.utils.Navigator
+import com.beloushkin.fooddataviewer.utils.IdlingResource
+
 import dagger.*
 import dagger.multibindings.IntoMap
 import okhttp3.OkHttpClient
@@ -36,13 +39,19 @@ internal annotation class ViewModelKey(val value: KClass<out ViewModel>)
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class ApiBaseUrl
 
-@Singleton
-@Component(modules = [ApplicationModule::class, ViewModelModule::class, ApiModule::class,
-                        DatabaseModule::class])
+
 interface ApplicationComponent {
     fun viewModelFactory(): ViewModelProvider.Factory
 
     fun activityService(): ActivityService
+
+    fun frameProcessorOnSubscribe(): FrameProcessorOnSubscribe
+}
+
+@Singleton
+@Component(modules = [ApplicationModule::class, ViewModelModule::class, ApiModule::class,
+    DatabaseModule::class, RealModule::class])
+interface RealComponent: ApplicationComponent {
 
     @Component.Builder
     interface Builder {
@@ -50,7 +59,7 @@ interface ApplicationComponent {
         @BindsInstance
         fun context(context: Context): Builder
 
-        fun build(): ApplicationComponent
+        fun build(): RealComponent
     }
 }
 
@@ -80,7 +89,6 @@ object ApplicationModule {
     @ApiBaseUrl
     @JvmStatic
     fun apiBaseUrl(context: Context): String = context.getString(R.string.api_base_url)
-
 
 }
 
@@ -152,10 +160,27 @@ object DatabaseModule {
         return Room.databaseBuilder(context, ApplicationDatabase::class.java, "application")
             .build()
     }
+}
+
+
+@Module
+object RealModule {
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun frameProcessorOnSubscribe(): FrameProcessorOnSubscribe = FrameProcessorOnSubscribe()
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun idlingResource(): IdlingResource = object : IdlingResource {
+        override fun increment() {}
+        override fun decrement() {}
+    }
 
     @Provides
     @Singleton
     @JvmStatic
     fun productDao(database: ApplicationDatabase) = database.productDao()
-
 }
