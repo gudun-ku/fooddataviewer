@@ -2,7 +2,7 @@ package com.beloushkin.fooddataviewer.di
 
 import android.content.Context
 import com.beloushkin.fooddataviewer.model.database.ProductDao
-import com.beloushkin.fooddataviewer.scan.TestFrameProcessorOnSubscribe
+import com.beloushkin.fooddataviewer.utils.TestFrameProcessorOnSubscribe
 import com.beloushkin.fooddataviewer.scan.utils.FrameProcessorOnSubscribe
 import com.beloushkin.fooddataviewer.utils.IdlingResource
 import com.beloushkin.fooddataviewer.utils.TestIdlingResource
@@ -34,7 +34,8 @@ object TestModule {
     @Singleton
     @JvmStatic
     @Provides
-    fun frameProcessorOnSubscribe(): FrameProcessorOnSubscribe = TestFrameProcessorOnSubscribe()
+    fun frameProcessorOnSubscribe(): FrameProcessorOnSubscribe =
+        TestFrameProcessorOnSubscribe()
 
     @Provides
     @Singleton

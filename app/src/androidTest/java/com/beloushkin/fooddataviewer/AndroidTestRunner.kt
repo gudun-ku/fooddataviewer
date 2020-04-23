@@ -4,7 +4,6 @@ import android.app.Application
 import android.app.Instrumentation
 import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
-import com.github.tmurakami.dexopener.DexOpener
 
 @Suppress("unused")
 class AndroidTestRunner: AndroidJUnitRunner() {
@@ -14,7 +13,6 @@ class AndroidTestRunner: AndroidJUnitRunner() {
         className: String?,
         context: Context?
     ): Application {
-        DexOpener.install(this) // Call me first!
         return Instrumentation.newApplication(AndroidTestApplication::class.java, context)
     }
 }

@@ -18,25 +18,25 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.google.android.gms.vision.L.TAG
+import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
+import com.jakewharton.rxbinding3.view.clicks
 import com.beloushkin.fooddataviewer.R
 import com.beloushkin.fooddataviewer.component
 import com.beloushkin.fooddataviewer.getViewModel
-import com.bumptech.glide.Glide
-import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
-import com.jakewharton.rxbinding3.view.clicks
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.configuration.CameraConfiguration
-import io.fotoapparat.preview.Frame
 import io.fotoapparat.selector.continuousFocusPicture
 import io.fotoapparat.selector.manualExposure
-import io.fotoapparat.util.FrameProcessor
 import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.product_layout_small.*
+import kotlinx.android.synthetic.main.food_details_fragment.*
+import kotlinx.android.synthetic.main.product_layout_small.brandNameView
+import kotlinx.android.synthetic.main.product_layout_small.productImageView
+import kotlinx.android.synthetic.main.product_layout_small.productNameView
 import kotlinx.android.synthetic.main.scan_fragment.*
-import java.lang.IllegalStateException
+import kotlinx.android.synthetic.main.scan_fragment.loadingIndicator
 
 class ScanFragment : Fragment(R.layout.scan_fragment) {
 
@@ -57,57 +57,58 @@ class ScanFragment : Fragment(R.layout.scan_fragment) {
         super.onViewCreated(view, savedInstanceState)
 
         val frameProcessor = requireContext().component.frameProcessorOnSubscribe()
-
         fotoapparat = Fotoapparat(
             context = requireContext(),
             view = cameraView,
             cameraConfiguration = CameraConfiguration(
-                frameProcessor = frameProcessor
-                ,exposureCompensation = manualExposure(4)
-                // for emulator disabled ...
+                frameProcessor = frameProcessor,
+                exposureCompensation = manualExposure(4)
+                // TODO disable comment here when run on device, on emulator comment it again
                 //,focusMode = continuousFocusPicture()
             )
         )
 
         val cameraId = findRearFacingCameraId()
+
         disposable = Observable.mergeArray(Observable.create(frameProcessor)
             .map { frame ->
                 Captured(
                     frame.copy(
                         rotation = getRotationCompensation(
-                            cameraId
-                            ,this.activity as Activity
-                            ,this.context!!
+                            cameraId,
+                            this.activity as Activity,
+                            this.context!!
                         )
                     )
                 )
             },
             productView.clicks().map { ProductInfoClicked }
-            )
+        )
             .compose(getViewModel(ScanViewModel::class))
-            .subscribe {model ->
+            .subscribe { model ->
                 loadingIndicator.isVisible = model.activity
-                productView.isVisible = model.processBarcodeResult is ProcessBarcodeResult.ProductLoaded
+                productView.isVisible =
+                    model.processBarcodeResult is ProcessBarcodeResult.ProductLoaded
                 errorView.isVisible = model.processBarcodeResult is ProcessBarcodeResult.Error
 
                 if (model.processBarcodeResult is ProcessBarcodeResult.ProductLoaded) {
                     productNameView.text = model.processBarcodeResult.product.name
                     brandNameView.text = model.processBarcodeResult.product.brands
-                    energyValue.text = getString(
+                    energyValueView.text = getString(
                         R.string.scan_energy_value,
                         model.processBarcodeResult.product.nutriments?.energy
                     )
-                    carbsValue.text = getString(
+                    carbsValueView.text = getString(
                         R.string.scan_macro_value,
                         model.processBarcodeResult.product.nutriments?.carbohydrates
                     )
-                    proteinsValue.text = getString(
-                        R.string.scan_macro_value,
-                        model.processBarcodeResult.product.nutriments?.proteins
-                    )
-                    fatValue.text = getString(
+                    fatValueView.text = getString(
                         R.string.scan_macro_value,
                         model.processBarcodeResult.product.nutriments?.fat
+                    )
+                    proteinValueView.text = getString(
+                        R.string.scan_macro_value,
+                        model.processBarcodeResult.product.nutriments?.proteins
                     )
 
                     Glide.with(requireContext())
@@ -129,9 +130,7 @@ class ScanFragment : Fragment(R.layout.scan_fragment) {
     }
 
     override fun onDestroyView() {
-        if (::disposable.isInitialized) {
-            disposable.dispose()
-        }
+        disposable.dispose()
         super.onDestroyView()
     }
 
@@ -152,19 +151,20 @@ class ScanFragment : Fragment(R.layout.scan_fragment) {
         }
     }
 
-    private fun hasCameraPermission() = ContextCompat.checkSelfPermission(requireContext(),
-        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-
+    private fun hasCameraPermission() = ContextCompat.checkSelfPermission(
+        requireContext(),
+        Manifest.permission.CAMERA
+    ) == PackageManager.PERMISSION_GRANTED
 
     private fun findRearFacingCameraId(): String {
-        val cameraManager = activity?.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val cameraManager = activity?.getSystemService(CAMERA_SERVICE) as CameraManager
         val cameraIds = cameraManager.cameraIdList
-        cameraIds.forEach {id ->
+        cameraIds.forEach { id ->
             val characteristics = cameraManager.getCameraCharacteristics(id)
             val orientation = characteristics.get(CameraCharacteristics.LENS_FACING)
             if (orientation == CameraCharacteristics.LENS_FACING_BACK) return id
         }
-        throw IllegalStateException("Unable to find camera ID!")
+        throw IllegalStateException("Unable to find camera id")
     }
 
     /**
@@ -173,7 +173,11 @@ class ScanFragment : Fragment(R.layout.scan_fragment) {
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Throws(CameraAccessException::class)
-    private fun getRotationCompensation(cameraId: String, activity: Activity, context: Context): Int {
+    private fun getRotationCompensation(
+        cameraId: String,
+        activity: Activity,
+        context: Context
+    ): Int {
         // Get the device's current rotation relative to its "native" orientation.
         // Then, from the ORIENTATIONS table, look up the angle the image must be
         // rotated to compensate for the device's rotation.
@@ -198,7 +202,7 @@ class ScanFragment : Fragment(R.layout.scan_fragment) {
             270 -> result = FirebaseVisionImageMetadata.ROTATION_270
             else -> {
                 result = FirebaseVisionImageMetadata.ROTATION_0
-                Log.e("CameraID", "Bad rotation value: $rotationCompensation")
+                Log.e(TAG, "Bad rotation value: $rotationCompensation")
             }
         }
         return result

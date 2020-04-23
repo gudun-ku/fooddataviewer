@@ -16,4 +16,9 @@ open class FrameProcessorOnSubscribe: ObservableOnSubscribe<Frame>, FrameProcess
     override fun invoke(frame: Frame) {
         emitter?.onNext(frame)
     }
+
+    // for ending scan tests
+    fun complete() {
+        emitter?.onComplete()
+    }
 }

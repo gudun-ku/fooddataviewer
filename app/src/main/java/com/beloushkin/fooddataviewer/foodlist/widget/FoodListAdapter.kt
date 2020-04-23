@@ -62,19 +62,19 @@ class FoodListProductViewHolder(
 
         productNameView.text = product.name
         brandNameView.text = product.brands
-        energyValue.text = context.getString(
+        energyValueView.text = context.getString(
             R.string.scan_energy_value,
             product.nutriments?.energy
         )
-        carbsValue.text = context.getString(
+        carbsValueView.text = context.getString(
             R.string.scan_macro_value,
             product.nutriments?.carbohydrates
         )
-        proteinsValue.text = context.getString(
+        proteinValueView.text = context.getString(
             R.string.scan_macro_value,
             product.nutriments?.proteins
         )
-        fatValue.text = context.getString(
+        fatValueView.text = context.getString(
             R.string.scan_macro_value,
             product.nutriments?.fat
         )

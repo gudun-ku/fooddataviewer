@@ -17,12 +17,14 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "com.beloushkin.fooddataviewer.AndrodTestRunner"
+        testInstrumentationRunner "com.beloushkin.fooddataviewer.AndroidTestRunner"
     }
     testBuildType 'instrumented'
 
     testOptions {
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        // execution 'ANDROID_TEST_ORCHESTRATOR'
+        // disable animations
+        animationsDisabled = true
     }
 
     buildTypes {
@@ -103,9 +105,9 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
 
     testImplementation "junit:junit:$junitVersion"
-//    testImplementation 'io.kotlintest.kotlintest-runner-junit4:3.4.2'
-//    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
-//    testImplementation "androidx.arch.core:core-testing:$coreTestingVersion"
+
+    // instead of using in option, old style does not work
+    androidTestUtil "com.android.support.test:orchestrator:1.0.2"
 
     androidTestImplementation "androidx.test:runner:$runnerVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"

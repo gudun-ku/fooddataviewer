@@ -15,7 +15,7 @@ fun scanUpdate(
     event: ScanEvent
 ): Next<ScanModel, ScanEffect> {
     return when(event) {
-        is Captured -> Next.dispatch(setOf(ProcessCameraFrame(event.frame)))
+        is Captured -> dispatch(setOf(ProcessCameraFrame(event.frame)))
         is Detected -> if (!model.activity){
             next<ScanModel, ScanEffect> (model.copy(activity = true),
                 setOf(ProcessBarcode(event.barcode))
