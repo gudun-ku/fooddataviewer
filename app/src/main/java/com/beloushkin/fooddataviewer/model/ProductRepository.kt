@@ -18,8 +18,10 @@ class ProductRepository @Inject constructor(private val productService: ProductS
     }
 
     fun loadProduct(barcode: String): Single<Product> {
-        return getProductFromDatabase(barcode)
+        val product =
+        getProductFromDatabase(barcode)
             .onErrorResumeNext(getProductFromApi(barcode))
+        return  product
     }
 
     fun getProductFromDatabase(barcode: String): Single<Product> {

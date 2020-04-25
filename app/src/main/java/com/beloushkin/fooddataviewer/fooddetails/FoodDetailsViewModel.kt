@@ -2,6 +2,7 @@ package com.beloushkin.fooddataviewer.fooddetails
 
 import com.beloushkin.fooddataviewer.MobiusVM
 import com.beloushkin.fooddataviewer.model.ProductRepository
+import com.beloushkin.fooddataviewer.utils.IdlingResource
 import com.spotify.mobius.Next
 import com.spotify.mobius.Next.*
 import com.spotify.mobius.Update
@@ -41,7 +42,9 @@ fun foodDetailsUpdate(
 
 
 class FoodDetailsViewModel @Inject constructor(
-    productRepository: ProductRepository
+    productRepository: ProductRepository,
+    //TODO - for testing purposes, can be removed
+    idlingResource: IdlingResource
 ): MobiusVM<FoodDetailsModel, FoodDetailsEvent, FoodDetailsEffect> (
     "FoodDetailsViewModel",
     Update(::foodDetailsUpdate),
@@ -54,8 +57,16 @@ class FoodDetailsViewModel @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .toObservable()
-                    .map {product -> ProductLoaded(product) as FoodDetailsEvent }
-                    .onErrorReturn { ErrorLoadingProduct }
+                    .map {product ->
+                        ProductLoaded(product) as FoodDetailsEvent
+                    }
+                    .onErrorReturn {
+                        ErrorLoadingProduct
+                    }
+                    .doFinally {
+                        //TODO - for testing purposes, can be removed
+                        //idlingResource.decrement()
+                    }
             }
         }
         .addTransformer(SaveProduct::class.java) { upstream ->

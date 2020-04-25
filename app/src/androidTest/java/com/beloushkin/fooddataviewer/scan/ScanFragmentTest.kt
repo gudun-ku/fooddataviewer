@@ -63,7 +63,7 @@ class ScanFragmentTest {
         val mockResponse = MockResponse()
 
 
-        json = readJson(context!!, "scanfragmenttest.json")
+        json = readJson(context!!, "productresponse.json")
         mockResponse.setBody(json)
         mockResponse.setResponseCode(200)
         mockWebServer.enqueue(mockResponse)

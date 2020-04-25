@@ -8,10 +8,13 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import com.beloushkin.fooddataviewer.di.DaggerTestComponent
+import java.io.IOException
 
 class AndroidTestApplication : App() {
 
+
     val productDtosSubject = PublishSubject.create<List<ProductDto>>()
+    val productDtoSubject = PublishSubject.create<ProductDto>()
     private val productDao: ProductDao = object : ProductDao() {
 
         override fun get(): Observable<List<ProductDto>> {
@@ -19,7 +22,8 @@ class AndroidTestApplication : App() {
         }
 
         override fun getProduct(barcode: String): Single<ProductDto> {
-            throw NotImplementedError("Not implemented in instrumented testing") as Throwable
+            //throw NotImplementedError("Not implemented in instrumented testing") as Throwable
+            return Single.error(NotImplementedError("Not implemented in instrumented testing"))
         }
 
         override fun insert(productDto: ProductDto): Completable {
